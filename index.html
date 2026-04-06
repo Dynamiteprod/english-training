@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Grammar Gym – Beginner Level</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            padding: 24px 20px;
+        }
+
+        /* conteneur principal */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* en-tête */
+        .header {
+            background: linear-gradient(135deg, #0f2b3d 0%, #1b4a6e 100%);
+            color: white;
+            padding: 24px 30px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        .header p {
+            opacity: 0.85;
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        /* menu thèmes */
+        .theme-menu {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .theme-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1e293b;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .theme-btn:hover {
+            background: #e0e7ff;
+            transform: translateY(-2px);
+        }
+        .theme-btn.active {
+            background: #1e4a76;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* zone principale */
+        .main-panel {
+            padding: 28px 30px 40px;
+        }
+
+        /* zone de statistiques (score + conseil) */
+        .stats-area {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 18px 24px;
+            margin-bottom: 32px;
+            border: 1px solid #e2edf2;
+            transition: all 0.2s;
+        }
+        .stats-area.hidden {
+            display: none;
+        }
+        .score-badge {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f3b2c;
+        }
+        .advice-text {
+            margin-top: 10px;
+            font-size: 1rem;
+            background: #eef2ff;
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        .reset-score-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 20px;
+            transition: 0.1s;
+        }
+        .reset-score-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* grille des exercices */
+        .exercises-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .exercise-card {
+            background: white;
+            border-radius: 24px;
+            border: 1px solid #e9eef3;
+            padding: 20px 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: 0.1s;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: #0c4a6e;
+            border-left: 4px solid #3b82f6;
+            padding-left: 16px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 16px 0 12px;
+        }
+        .opt-label {
+            background: #f8fafc;
+            padding: 8px 18px;
+            border-radius: 60px;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 0.95rem;
+        }
+        .opt-label.selected {
+            background: #1e4a76;
+            border-color: #1e4a76;
+            color: white;
+        }
+        .opt-label:hover {
+            background: #e2e8f0;
+        }
+        .feedback {
+            margin-top: 14px;
+            font-size: 0.9rem;
+            padding: 10px 14px;
+            border-radius: 18px;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .feedback.correct {
+            background: #dcfce7;
+            color: #14532d;
+            border-left: 4px solid #22c55e;
+        }
+        .feedback.wrong {
+            background: #ffe4e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        hr {
+            margin: 12px 0 0;
+            border-color: #eef2ff;
+        }
+        .submit-theme-btn {
+            margin-top: 32px;
+            background: #0f2b3d;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .submit-theme-btn:hover {
+            background: #1e4a76;
+            transform: scale(0.98);
+        }
+        .empty-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #5b6e8c;
+            font-size: 1.1rem;
+        }
+        footer {
+            font-size: 0.75rem;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding: 18px;
+            color: #5f7f9e;
+        }
+        @media (max-width: 700px) {
+            .main-panel { padding: 20px; }
+            .question-text { font-size: 1rem; }
+            .opt-label { padding: 6px 14px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <h1>📘 English Grammar Gym</h1>
+        <p>Niveau Beginner · 200 exercices · 10 thèmes essentiels</p>
+    </div>
+
+    <div class="theme-menu" id="themeMenu"></div>
+
+    <div class="main-panel">
+        <div class="stats-area hidden" id="statsArea">
+            <div>
+                <span class="score-badge" id="scoreValue">0%</span>
+                <button class="reset-score-btn" id="resetStatsBtn">⟳ Masquer</button>
+            </div>
+            <div class="advice-text" id="adviceMessage"></div>
+        </div>
+
+        <div id="exercisesContainer">
+            <div class="empty-message">✨ Clique sur un thème pour commencer ton entraînement ✨</div>
+        </div>
+    </div>
+    <footer>✅ QCM interactifs · Explications détaillées · Progression personnalisée</footer>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 1. GÉNÉRATION DES 200 EXERCICES (20 PAR THÈME)
+    // Chaque fonction retourne 20 objets { question, options, correct, explanation }
+    // --------------------------------------------------------------
+
+    // Thème 1 : Verbes de base (to be, have, do, go, make, etc.)
+    function generateVerbesExercises() {
+        const data = [];
+        const templates = [
+            { q: "I ___ a student.", opts: ["am","is","are","be"], correct:0, exp: "Le verbe 'to be' avec 'I' donne 'am'." },
+            { q: "She ___ to school every day.", opts: ["go","goes","going","went"], correct:1, exp: "He/She/It + verbe en -s → 'goes'." },
+            { q: "They ___ playing football now.", opts: ["is","am","are","be"], correct:2, exp: "'They' prend 'are' au présent continu." },
+            { q: "We ___ a new car.", opts: ["has","have","having","haves"], correct:1, exp: "'We' + 'have' (possession)." },
+            { q: "He ___ breakfast at 8 am.", opts: ["have","has","having","to have"], correct:1, exp: "He/She/It + has." },
+            { q: "___ you like ice cream?", opts: ["Does","Do","Is","Are"], correct:1, exp: "Question avec 'do' pour les verbes ordinaires." },
+            { q: "My brother ___ very fast.", opts: ["run","runs","running","to run"], correct:1, exp: "Troisième personne singulier → runs." },
+            { q: "Let's ___ to the cinema.", opts: ["go","goes","going","went"], correct:0, exp: "Après 'let's' on utilise la base verbale." },
+            { q: "She ___ her homework now.", opts: ["do","does","doing","is doing"], correct:3, exp: "Présent continu: is doing." },
+            { q: "They ___ happy yesterday.", opts: ["was","were","is","are"], correct:1, exp: "Passé de 'to be' pour 'they' = were." },
+            { q: "I ___ to London last year.", opts: ["go","went","gone","goes"], correct:1, exp: "Passé simple de 'go' = went." },
+            { q: "We can ___ French.", opts: ["speak","speaks","speaking","spoke"], correct:0, exp: "Après 'can' on met le verbe sans to." },
+            { q: "He ___ his keys.", opts: ["lose","lost","loses","losing"], correct:1, exp: "Past simple: lost." },
+            { q: "___ he a doctor?", opts: ["Is","Are","Do","Does"], correct:0, exp: "Avec 'he' et adjectif/ nom on utilise 'is'." },
+            { q: "The dog ___ barking loudly.", opts: ["is","are","am","be"], correct:0, exp: "Dog (singulier) + is." },
+            { q: "They ___ not coming tonight.", opts: ["is","am","are","be"], correct:2, exp: "They are not / aren't." },
+            { q: "I need ___ some water.", opts: ["drink","to drink","drinking","drank"], correct:1, exp: "need + to + verbe." },
+            { q: "She always ___ coffee in the morning.", opts: ["drink","drinks","is drink","drinking"], correct:1, exp: "Habitude → présent simple 3e pers." },
+            { q: "We ___ watching a movie at 9pm.", opts: ["will","are","is","am"], correct:1, exp: "Present continuous pour futur proche." },
+            { q: "The children ___ playing outside.", opts: ["is","am","are","be"], correct:2, exp: "Children (pluriel) → are." }
+        ];
+        for(let i=0; i<20; i++) {
+            const t = templates[i % templates.length];
+            data.push({ ...t });
+        }
+        return data;
+    }
+
+    // Thème 2 : Pronoms
+    function generatePronounsExercises() {
+        const list = [
+            { q: "___ am going to the park.", opts: ["You","He","I","She"], correct:2, exp: "Le pronom sujet 'I' s'utilise avec 'am'." },
+            { q: "Please give ___ the book.", opts: ["I","me","my","mine"], correct:1, exp: "Complément d'objet → 'me'." },
+            { q: "This is Mary. ___ is my sister.", opts: ["He","She","It","They"], correct:1, exp: "Mary est féminin → 'She'." },
+            { q: "John and I are friends. ___ play together.", opts: ["We","They","He","She"], correct:0, exp: "John et moi = we." },
+            { q: "Look at the cat. ___ is sleeping.", opts: ["He","She","It","They"], correct:2, exp: "Animal / objet → 'it'." },
+            { q: "These are my keys. ___ are on the table.", opts: ["It","He","She","They"], correct:3, exp: "Keys (pluriel) → they." },
+            { q: "Is this pen ___ ?", opts: ["you","your","yours","yourselves"], correct:2, exp: "Pronom possessif : 'yours' = le tien." },
+            { q: "She cooked dinner by ___ .", opts: ["her","hers","herself","she"], correct:2, exp: "Réfléchi → herself." },
+            { q: "This car belongs to Tom. It's ___ .", opts: ["him","his","he","he's"], correct:1, exp: "Possessif: his." },
+            { q: "___ are going to the party tonight.", opts: ["We","Us","Our","Ours"], correct:0, exp: "Sujet → we." },
+            { q: "I saw ___ at the cinema.", opts: ["they","them","their","theirs"], correct:1, exp: "Complément d'objet → them." },
+            { q: "She loves ___ new job.", opts: ["she","her","hers","herself"], correct:1, exp: "Adjectif possessif devant 'job'." },
+            { q: "The book is ___ .", opts: ["my","mine","me","I"], correct:1, exp: "Pronom possessif: mine." },
+            { q: "Did you see ___ ? (le chien)", opts: ["it","him","her","them"], correct:0, exp: "Pour un animal neutre : it." },
+            { q: "Paul and Mike? I know ___ .", opts: ["they","them","their","theirs"], correct:1, exp: "Complément: them." },
+            { q: "___ brother is a teacher.", opts: ["My","Mine","Me","I"], correct:0, exp: "Adjectif possessif my + brother." },
+            { q: "The students did the homework ___ .", opts: ["their","themselves","them","theirs"], correct:1, exp: "Par eux-mêmes → themselves." },
+            { q: "Please tell ___ the truth.", opts: ["I","me","my","mine"], correct:1, exp: "Objet indirect: me." },
+            { q: "___ am hungry.", opts: ["I","You","He","She"], correct:0, exp: "Sujet I." },
+            { q: "We bought this gift for ___ . (toi)", opts: ["you","your","yours","yourself"], correct:0, exp: "Objet 'you'." }
+        ];
+        while(list.length < 20) list.push(list[0]);
+        return list.slice(0,20);
+    }
+
+    // Thème 3 : Prépositions
+    function generatePrepositionsExercises() {
+        const arr = [
+            { q: "I wake up ___ 7 am.", opts: ["in","on","at","by"], correct:2, exp: "At pour une heure précise." },
+            { q: "Let's meet ___ Monday.", opts: ["in","on","at","for"], correct:1, exp: "On pour les jours." },
+            { q: "She lives ___ Paris.", opts: ["at","in","on","to"], correct:1, exp: "In pour les villes." },
+            { q: "The cat is hiding ___ the table.", opts: ["on","under","at","beside"], correct:1, exp: "Under = sous." },
+            { q: "I'll be there ___ ten minutes.", opts: ["in","on","at","for"], correct:0, exp: "In = dans (durée)." },
+            { q: "He is interested ___ music.", opts: ["in","at","on","about"], correct:0, exp: "Interested in." },
+            { q: "Please put the books ___ the shelf.", opts: ["in","on","at","over"], correct:1, exp: "On the shelf." },
+            { q: "We walked ___ the park.", opts: ["through","across","under","above"], correct:0, exp: "Through = à travers." },
+            { q: "She is afraid ___ spiders.", opts: ["of","from","by","at"], correct:0, exp: "Afraid of." },
+            { q: "I usually go to work ___ foot.", opts: ["by","on","with","in"], correct:1, exp: "On foot (exception)." },
+            { q: "He's waiting ___ the bus stop.", opts: ["at","in","on","to"], correct:0, exp: "At the bus stop." },
+            { q: "The restaurant is ___ the corner.", opts: ["on","at","in","by"], correct:1, exp: "At the corner." },
+            { q: "I'll finish this report ___ Friday.", opts: ["by","on","in","at"], correct:0, exp: "By = au plus tard." },
+            { q: "She always drinks coffee ___ the morning.", opts: ["in","on","at","during"], correct:0, exp: "In the morning." },
+            { q: "He fell asleep ___ the movie.", opts: ["during","in","at","for"], correct:0, exp: "Pendant → during." },
+            { q: "The picture is hanging ___ the wall.", opts: ["in","on","at","over"], correct:1, exp: "On the wall." },
+            { q: "She is good ___ math.", opts: ["in","at","on","for"], correct:1, exp: "Good at." },
+            { q: "We drove ___ the tunnel.", opts: ["through","across","along","under"], correct:0, exp: "Through = à travers tunnel." },
+            { q: "My birthday is ___ December.", opts: ["in","on","at","for"], correct:0, exp: "In + mois." },
+            { q: "He ran ___ the stairs.", opts: ["up","on","in","at"], correct:0, exp: "Up the stairs." }
+        ];
+        while(arr.length<20) arr.push(arr[0]);
+        return arr.slice(0,20);
+    }
+
+    // Thème 4 : Comparatifs / Superlatifs
+    function generateComparativesExercises() {
+        const items = [
+            { q: "This book is ___ than that one.", opts: ["cheaper","cheapest","cheap","more cheap"], correct:0, exp: "Comparatif court + -er than." },
+            { q: "She is the ___ student in class.", opts: ["smart","smarter","smartest","more smart"], correct:2, exp: "Superlatif avec the + -est." },
+            { q: "Today is ___ than yesterday.", opts: ["hotter","hottest","hot","more hot"], correct:0, exp: "Comparatif irrégulier: hotter." },
+            { q: "This is ___ movie I've ever seen.", opts: ["the best","better","good","the good"], correct:0, exp: "Superlatif de good = the best." },
+            { q: "My house is ___ from school than yours.", opts: ["far","farther","the farthest","more far"], correct:1, exp: "Comparatif de far = farther." },
+            { q: "He runs ___ than me.", opts: ["fast","faster","fastest","more fast"], correct:1, exp: "Adverbe court + -er." },
+            { q: "Which is ___ , the sun or the moon?", opts: ["bigger","biggest","more big","the biggest"], correct:0, exp: "Comparatif entre deux." },
+            { q: "This puzzle is ___ difficult.", opts: ["most","the most","more","the more"], correct:1, exp: "Superlatif long: the most difficult." },
+            { q: "Her score is ___ than mine.", opts: ["good","better","best","well"], correct:1, exp: "Comparatif irrégulier: better." },
+            { q: "That's ___ building in the city.", opts: ["tall","taller","the tallest","more tall"], correct:2, exp: "Superlatif: the tallest." },
+            { q: "Iron is ___ than wood.", opts: ["heavy","heavier","heaviest","more heavy"], correct:1, exp: "heavier than." },
+            { q: "This is ___ expensive restaurant.", opts: ["the most","most","more","the more"], correct:0, exp: "Superlatif." },
+            { q: "She sings ___ than her sister.", opts: ["beautifully","more beautifully","most beautifully","beautifuller"], correct:1, exp: "Adverbe long → more + adv." },
+            { q: "He is ___ person I know.", opts: ["kind","kinder","kindest","the kindest"], correct:3, exp: "Superlatif the kindest." },
+            { q: "My results are ___ than before.", opts: ["bad","worse","worst","the worst"], correct:1, exp: "Comparatif irrégulier: worse." },
+            { q: "This road is ___ in the region.", opts: ["long","longer","the longest","more long"], correct:2, exp: "Superlatif." },
+            { q: "She feels ___ today.", opts: ["happier","happy","happiest","more happy"], correct:0, exp: "Comparatif." },
+            { q: "Who is ___ , Tom or Jerry?", opts: ["funnier","funniest","funny","more funny"], correct:0, exp: "Comparatif." },
+            { q: "This is ___ cake I've ever tasted.", opts: ["delicious","more delicious","the most delicious","deliciouser"], correct:2, exp: "Superlatif long." },
+            { q: "He is ___ than his brother.", opts: ["tall","taller","the tallest","more tall"], correct:1, exp: "Comparatif." }
+        ];
+        return items.slice(0,20);
+    }
+
+    // Thème 5 : Questions simples
+    function generateQuestionsExercises() {
+        const qs = [
+            { q: "___ you like pizza?", opts: ["Does","Do","Is","Are"], correct:1, exp: "Do + you pour verbes ordinaires." },
+            { q: "___ she speak Spanish?", opts: ["Do","Does","Is","Are"], correct:1, exp: "Does pour she/he/it." },
+            { q: "Where ___ you live?", opts: ["do","does","is","are"], correct:0, exp: "Question avec do + sujet." },
+            { q: "What time ___ the meeting start?", opts: ["do","does","is","are"], correct:1, exp: "Meeting (3e pers.) → does." },
+            { q: "___ they coming to the party?", opts: ["Is","Are","Do","Does"], correct:1, exp: "Are they + coming (be + -ing)." },
+            { q: "How old ___ you?", opts: ["is","am","are","be"], correct:2, exp: "You → are." },
+            { q: "___ is your best friend?", opts: ["Who","What","Where","When"], correct:0, exp: "Who pour une personne." },
+            { q: "___ color is your car?", opts: ["Which","What","Who","Whose"], correct:1, exp: "What color." },
+            { q: "___ bag is this?", opts: ["Who","Whose","What","Which"], correct:1, exp: "Whose = à qui." },
+            { q: "Why ___ you sad?", opts: ["is","are","am","do"], correct:1, exp: "You are sad → Are you sad?" },
+            { q: "How ___ sugar do you need?", opts: ["many","much","some","any"], correct:1, exp: "Much pour indénombrable." },
+            { q: "___ we go to the park?", opts: ["Shall","Do","Are","Is"], correct:0, exp: "Shall we = suggestion." },
+            { q: "___ you watch TV yesterday?", opts: ["Did","Do","Does","Are"], correct:0, exp: "Did pour passé simple." },
+            { q: "What ___ you doing now?", opts: ["are","is","am","do"], correct:0, exp: "Present continuous." },
+            { q: "___ he a doctor?", opts: ["Is","Are","Do","Does"], correct:0, exp: "To be → Is he?" },
+            { q: "How much ___ these shoes?", opts: ["is","are","do","does"], correct:1, exp: "Shoes pluriel → are." },
+            { q: "___ you help me, please?", opts: ["Can","Do","Are","Does"], correct:0, exp: "Can pour demande." },
+            { q: "Which one ___ you prefer?", opts: ["do","does","is","are"], correct:0, exp: "Do you prefer." },
+            { q: "___ time is it?", opts: ["What","Which","When","Who"], correct:0, exp: "What time." },
+            { q: "___ they arrive on time?", opts: ["Did","Do","Does","Are"], correct:0, exp: "Passé → Did." }
+        ];
+        while(qs.length<20) qs.push(qs[0]);
+        return qs.slice(0,20);
+    }
+
+    // Thème 6 : Adjectifs et adverbes simples
+    function generateAdjAdvExercises() {
+        const items = [
+            { q: "She sings ___ .", opts: ["beautiful","beautifully","beauty","more beautiful"], correct:1, exp: "Adverbe pour décrire le verbe." },
+            { q: "He is a ___ driver.", opts: ["careful","carefully","care","more careful"], correct:0, exp: "Adjectif devant nom." },
+            { q: "The test was ___ .", opts: ["easy","easily","ease","more easy"], correct:0, exp: "Adjectif après 'was'." },
+            { q: "Please speak ___ .", opts: ["slow","slowly","slower","more slow"], correct:1, exp: "Adverbe 'slowly'." },
+            { q: "It's an ___ day.", opts: ["amazing","amazingly","amaze","amazed"], correct:0, exp: "Adjectif attribut." },
+            { q: "He works very ___ .", opts: ["hard","hardly","harder","the hardest"], correct:0, exp: "Hard = beaucoup (adverbe)." },
+            { q: "She looked ___ at the picture.", opts: ["happy","happily","happiness","happier"], correct:1, exp: "Adverbe de manière." },
+            { q: "This coffee is ___ hot.", opts: ["extreme","extremely","more extreme","most extreme"], correct:1, exp: "Adverbe devant adjectif." },
+            { q: "He is a ___ runner.", opts: ["quick","quickly","quickness","quicker"], correct:0, exp: "Adjectif + nom." },
+            { q: "She did ___ on the exam.", opts: ["good","well","nice","better"], correct:1, exp: "Well = adverbe de manière." },
+            { q: "That's a ___ idea.", opts: ["great","greatly","greater","most great"], correct:0, exp: "Adjectif." },
+            { q: "He drives too ___ .", opts: ["fast","fastly","faster","fastest"], correct:0, exp: "Fast = adjectif et adverbe." },
+            { q: "The soup tastes ___ .", opts: ["delicious","deliciously","deliciousness","more delicious"], correct:0, exp: "Adjectif après verbe de sensation." },
+            { q: "She smiled ___ .", opts: ["friendly","warmly","warm","warmer"], correct:1, exp: "Adverbe." },
+            { q: "He is ___ tired.", opts: ["terrible","terribly","terrify","terrific"], correct:1, exp: "Adverbe devant adjectif." },
+            { q: "That's a ___ beautiful view.", opts: ["real","really","reality","more real"], correct:1, exp: "Really + adjectif." },
+            { q: "She spoke ___ .", opts: ["quiet","quietly","quietness","quieter"], correct:1, exp: "Adverbe." },
+            { q: "He's a ___ worker.", opts: ["hard","hardly","harder","hardest"], correct:0, exp: "Adjectif." },
+            { q: "The children played ___ .", opts: ["noisy","noisily","noise","noisier"], correct:1, exp: "Adverbe." },
+            { q: "This is ___ important.", opts: ["extreme","extremely","more extreme","most"], correct:1, exp: "Extremely + adj." }
+        ];
+        return items.slice(0,20);
+    }
+
+    // Thème 7 : Formes négatives
+    function generateNegativesExercises() {
+        const negs = [
+            { q: "She ___ like coffee.", opts: ["don't","doesn't","isn't","aren't"], correct:1, exp: "Doesn't pour 3e personne singulier." },
+            { q: "I ___ a teacher.", opts: ["am not","isn't","aren't","don't"], correct:0, exp: "I am not." },
+            { q: "They ___ coming tomorrow.", opts: ["isn't","aren't","don't","doesn't"], correct:1, exp: "They are not → aren't." },
+            { q: "He ___ breakfast in the morning.", opts: ["don't have","doesn't have","isn't have","aren't have"], correct:1, exp: "Doesn't + have (base)." },
+            { q: "We ___ to school yesterday.", opts: ["didn't went","didn't go","don't go","wasn't go"], correct:1, exp: "Didn't + verbe base." },
+            { q: "There ___ any milk left.", opts: ["isn't","aren't","don't","doesn't"], correct:0, exp: "Milk singulier → isn't." },
+            { q: "You ___ listen to me!", opts: ["don't","doesn't","isn't","aren't"], correct:0, exp: "Don't pour impératif négatif." },
+            { q: "She ___ happy yesterday.", opts: ["wasn't","weren't","didn't","isn't"], correct:0, exp: "Passé singulier wasn't." },
+            { q: "It ___ rain very often here.", opts: ["don't","doesn't","isn't","aren't"], correct:1, exp: "It doesn't rain." },
+            { q: "I ___ to the party last night.", opts: ["didn't go","didn't went","don't go","wasn't go"], correct:0, exp: "Didn't + go." },
+            { q: "He ___ a doctor.", opts: ["isn't","aren't","don't","doesn't"], correct:0, exp: "He isn't." },
+            { q: "They ___ their homework yet.", opts: ["haven't done","hasn't done","didn't did","don't do"], correct:0, exp: "Present perfect négatif." },
+            { q: "We ___ see that movie.", opts: ["didn't","wasn't","weren't","don't"], correct:0, exp: "Didn't see." },
+            { q: "She ___ like spicy food.", opts: ["doesn't","don't","isn't","aren't"], correct:0, exp: "Doesn't like." },
+            { q: "The children ___ sleeping now.", opts: ["aren't","isn't","don't","doesn't"], correct:0, exp: "aren't sleeping." },
+            { q: "I ___ understand the question.", opts: ["don't","doesn't","am not","isn't"], correct:0, exp: "Don't understand." },
+            { q: "He ___ to school yesterday.", opts: ["didn't come","didn't came","wasn't come","weren't come"], correct:0, exp: "Didn't come." },
+            { q: "This ___ my book.", opts: ["isn't","aren't","don't","doesn't"], correct:0, exp: "isn't my book." },
+            { q: "They ___ in Paris last week.", opts: ["weren't","wasn't","didn't","don't"], correct:0, exp: "Weren't pour pluriel." },
+            { q: "She ___ speak French.", opts: ["doesn't","don't","isn't","aren't"], correct:0, exp: "Doesn't speak." }
+        ];
+        return negs.slice(0,20);
+    }
+
+    // Thème 8 : Expressions de base
+    function generateExpressionsExercises() {
+        const exprs = [
+            { q: "How ___ you?", opts: ["is","am","are","be"], correct:2, exp: "How are you? formule de base." },
+            { q: "___ to meet you.", opts: ["Nice","Good","Fine","Well"], correct:0, exp: "Nice to meet you." },
+            { q: "What's your ___ ? (nom)", opts: ["name","age","job","country"], correct:0, exp: "What's your name?" },
+            { q: "I'm ___ . (remerciement)", opts: ["sorry","fine","thanks","welcome"], correct:2, exp: "Thanks = merci." },
+            { q: "You're ___ . (réponse à merci)", opts: ["welcome","sorry","fine","great"], correct:0, exp: "You're welcome." },
+            { q: "___ is the weather?", opts: ["What","How","Where","Who"], correct:1, exp: "How's the weather?" },
+            { q: "I'm ___ . (fatigué)", opts: ["tired","boring","excited","happy"], correct:0, exp: "I'm tired." },
+            { q: "Can I have the ___ , please? (addition)", opts: ["bill","menu","plate","food"], correct:0, exp: "The bill, please." },
+            { q: "How much ___ it?", opts: ["is","are","am","do"], correct:0, exp: "How much is it?" },
+            { q: "See you ___ !", opts: ["late","later","lately","latest"], correct:1, exp: "See you later." },
+            { q: "___ are you from?", opts: ["Where","What","Who","Which"], correct:0, exp: "Where are you from?" },
+            { q: "I'm sorry, I'm ___ .", opts: ["late","lately","latest","more late"], correct:0, exp: "I'm late." },
+            { q: "Have a nice ___ !", opts: ["day","time","hour","moment"], correct:0, exp: "Have a nice day." },
+            { q: "What ___ is it?", opts: ["time","hour","clock","watch"], correct:0, exp: "What time is it?" },
+            { q: "Good ___ ! (le matin)", opts: ["morning","afternoon","evening","night"], correct:0, exp: "Good morning." },
+            { q: "___ you help me?", opts: ["Can","Do","Are","Is"], correct:0, exp: "Can you help me?" },
+            { q: "I don't ___ . (comprendre)", opts: ["understand","know","see","get"], correct:0, exp: "I don't understand." },
+            { q: "___ your pardon?", opts: ["Excuse","Sorry","Pardon","Forgive"], correct:0, exp: "Excuse me / Pardon?" },
+            { q: "My ___ is John.", opts: ["name","age","job","city"], correct:0, exp: "My name is John." },
+            { q: "Where is the ___ ? (toilettes)", opts: ["bathroom","restroom","toilet","WC"], correct:0, exp: "Where is the bathroom?" }
+        ];
+        return exprs.slice(0,20);
+    }
+
+    // Thème 9 : Articles
+    function generateArticlesExercises() {
+        const arts = [
+            { q: "I have ___ apple.", opts: ["a","an","the","—"], correct:1, exp: "Apple commence par voyelle → an." },
+            { q: "She is ___ teacher.", opts: ["a","an","the","—"], correct:0, exp: "Teacher consonne → a." },
+            { q: "___ sun is shining.", opts: ["A","An","The","—"], correct:2, exp: "The pour chose unique." },
+            { q: "He wants ___ new car.", opts: ["a","an","the","—"], correct:0, exp: "A new car." },
+            { q: "I saw ___ elephant at the zoo.", opts: ["a","an","the","—"], correct:1, exp: "An elephant." },
+            { q: "This is ___ best day ever!", opts: ["a","an","the","—"], correct:2, exp: "Superlatif → the." },
+            { q: "She doesn't like ___ cats.", opts: ["a","an","the","—"], correct:3, exp: "Pluriel général → sans article." },
+            { q: "He is ___ honest man.", opts: ["a","an","the","—"], correct:1, exp: "Honest (h muet) → an." },
+            { q: "I live in ___ apartment.", opts: ["a","an","the","—"], correct:1, exp: "An apartment." },
+            { q: "Let's go to ___ park.", opts: ["a","an","the","—"], correct:0, exp: "Un parc quelconque." },
+            { q: "___ Moon orbits Earth.", opts: ["A","An","The","—"], correct:2, exp: "The Moon." },
+            { q: "She plays ___ piano beautifully.", opts: ["a","an","the","—"], correct:2, exp: "Instruments de musique → the." },
+            { q: "I need ___ umbrella.", opts: ["a","an","the","—"], correct:1, exp: "An umbrella." },
+            { q: "They are ___ students.", opts: ["a","an","the","—"], correct:3, exp: "Pluriel sans article." },
+            { q: "This is ___ interesting book.", opts: ["a","an","the","—"], correct:1, exp: "Interesting commence par voyelle." },
+            { q: "He went to ___ hospital.", opts: ["a","an","the","—"], correct:0, exp: "A hospital." },
+            { q: "___ President will speak.", opts: ["A","An","The","—"], correct:2, exp: "The President (unique)." },
+            { q: "She has ___ European friend.", opts: ["a","an","the","—"], correct:0, exp: "European sonne 'you' → a." },
+            { q: "I love ___ coffee.", opts: ["a","an","the","—"], correct:3, exp: "Généralité → sans article." },
+            { q: "Let's watch ___ movie.", opts: ["a","an","the","—"], correct:0, exp: "A movie." }
+        ];
+        return arts.slice(0,20);
+    }
+
+    // Thème 10 : Conjonctions
+    function generateConjunctionsExercises() {
+        const conj = [
+            { q: "I like tea ___ coffee.", opts: ["and","but","or","so"], correct:0, exp: "And pour ajouter." },
+            { q: "She is tired, ___ she continues.", opts: ["and","but","or","so"], correct:1, exp: "But = opposition." },
+            { q: "Do you want pizza ___ pasta?", opts: ["and","but","or","so"], correct:2, exp: "Or pour choix." },
+            { q: "It was raining, ___ we stayed home.", opts: ["and","but","or","so"], correct:3, exp: "So = donc." },
+            { q: "He is smart ___ kind.", opts: ["and","but","or","so"], correct:0, exp: "Deux qualités positives." },
+            { q: "I was tired ___ I went to bed early.", opts: ["so","but","or","and"], correct:0, exp: "So = conséquence." },
+            { q: "She called me ___ I was busy.", opts: ["but","so","or","and"], correct:0, exp: "Opposition." },
+            { q: "We can go by car ___ by train.", opts: ["or","and","but","so"], correct:0, exp: "Choix." },
+            { q: "He didn't study, ___ he failed.", opts: ["so","but","or","and"], correct:0, exp: "Conséquence." },
+            { q: "I like apples ___ oranges.", opts: ["and","but","or","so"], correct:0, exp: "Ajout." },
+            { q: "She is young ___ very wise.", opts: ["but","and","or","so"], correct:0, exp: "Contraste." },
+            { q: "Would you like tea ___ coffee?", opts: ["or","and","but","so"], correct:0, exp: "Choix." },
+            { q: "He was hungry, ___ he ate a sandwich.", opts: ["so","but","or","and"], correct:0, exp: "Conséquence." },
+            { q: "She can sing ___ dance.", opts: ["and","but","or","so"], correct:0, exp: "Capacités additionnelles." },
+            { q: "I wanted to go, ___ I was too tired.", opts: ["but","so","or","and"], correct:0, exp: "Opposition." },
+            { q: "You can stay here ___ leave.", opts: ["or","and","but","so"], correct:0, exp: "Alternative." },
+            { q: "It's cold, ___ I'll take a jacket.", opts: ["so","but","or","and"], correct:0, exp: "Conséquence." },
+            { q: "He is poor ___ happy.", opts: ["but","and","or","so"], correct:0, exp: "Contraste." },
+            { q: "She woke up late ___ missed the bus.", opts: ["and","but","or","so"], correct:0, exp: "Succession logique." },
+            { q: "Study hard, ___ you will fail.", opts: ["or","and","but","so"], correct:0, exp: "Sinon → or." }
+        ];
+        return conj.slice(0,20);
+    }
+
+    // --------------------------------------------------------------
+    // 2. ASSEMBLAGE DES DONNÉES
+    const themesData = {
+        "Verbes de base": generateVerbesExercises(),
+        "Pronoms": generatePronounsExercises(),
+        "Prépositions": generatePrepositionsExercises(),
+        "Comparatifs / Superlatifs": generateComparativesExercises(),
+        "Questions simples": generateQuestionsExercises(),
+        "Adjectifs et adverbes simples": generateAdjAdvExercises(),
+        "Formes négatives": generateNegativesExercises(),
+        "Expressions de base": generateExpressionsExercises(),
+        "Articles": generateArticlesExercises(),
+        "Conjonctions": generateConjunctionsExercises()
+    };
+
+    // État global
+    let currentTheme = null;            // nom du thème actif
+    let userAnswers = new Map();         // key: exerciceIndex, value: optionIndex sélectionné
+    let feedbacks = new Map();           // stocke temporairement le message pour chaque exo
+    let scoreDisplayed = false;
+
+    // Éléments DOM
+    const themeMenuDiv = document.getElementById("themeMenu");
+    const exercisesContainer = document.getElementById("exercisesContainer");
+    const statsArea = document.getElementById("statsArea");
+    const scoreValueSpan = document.getElementById("scoreValue");
+    const adviceMessageSpan = document.getElementById("adviceMessage");
+    const resetStatsBtn = document.getElementById("resetStatsBtn");
+
+    // Construire le menu
+    function buildMenu() {
+        themeMenuDiv.innerHTML = "";
+        for (let theme of Object.keys(themesData)) {
+            const btn = document.createElement("button");
+            btn.textContent = theme;
+            btn.classList.add("theme-btn");
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".theme-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                loadTheme(theme);
+            });
+            themeMenuDiv.appendChild(btn);
+        }
+    }
+
+    // Charger un thème, réinitialiser les réponses
+    function loadTheme(theme) {
+        currentTheme = theme;
+        userAnswers.clear();
+        feedbacks.clear();
+        scoreDisplayed = false;
+        statsArea.classList.add("hidden");
+        renderExercises(theme);
+    }
+
+    // Afficher tous les exercices du thème
+    function renderExercises(theme) {
+        const exercises = themesData[theme];
+        if (!exercises) return;
+        exercisesContainer.innerHTML = "";
+        const gridDiv = document.createElement("div");
+        gridDiv.className = "exercises-grid";
+
+        exercises.forEach((ex, idx) => {
+            const card = document.createElement("div");
+            card.className = "exercise-card";
+            card.dataset.index = idx;
+            const questionDiv = document.createElement("div");
+            questionDiv.className = "question-text";
+            questionDiv.textContent = `${idx+1}. ${ex.question}`;
+            card.appendChild(questionDiv);
+
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            ex.options.forEach((opt, optIdx) => {
+                const label = document.createElement("label");
+                label.className = "opt-label";
+                label.textContent = opt;
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = `q${idx}`;
+                radio.value = optIdx;
+                radio.style.display = "none";
+                radio.addEventListener("change", (e) => {
+                    if (e.target.checked) {
+                        handleAnswer(idx, optIdx, ex);
+                        updateOptionStyle(card, optIdx);
+                    }
+                });
+                label.prepend(radio);
+                optionsDiv.appendChild(label);
+            });
+            card.appendChild(optionsDiv);
+
+            const feedbackDiv = document.createElement("div");
+            feedbackDiv.className = "feedback";
+            feedbackDiv.id = `fb-${idx}`;
+            if (feedbacks.has(idx)) {
+                const fb = feedbacks.get(idx);
+                feedbackDiv.innerHTML = fb.msg;
+                feedbackDiv.className = `feedback ${fb.type}`;
+            }
+            card.appendChild(feedbackDiv);
+            gridDiv.appendChild(card);
+        });
+
+        // Bouton global de validation
+        const submitBtn = document.createElement("button");
+        submitBtn.textContent = "📊 Voir mon score et conseils (thème complet)";
+        submitBtn.classList.add("submit-theme-btn");
+        submitBtn.addEventListener("click", () => computeAndShowStats(theme));
+        gridDiv.appendChild(submitBtn);
+        exercisesContainer.appendChild(gridDiv);
+    }
+
+    function updateOptionStyle(card, selectedIdx) {
+        const labels = card.querySelectorAll(".opt-label");
+        labels.forEach((label, i) => {
+            if (i === selectedIdx) label.classList.add("selected");
+            else label.classList.remove("selected");
+        });
+    }
+
+    function handleAnswer(qIndex, selectedOpt, exercise) {
+        const isCorrect = (selectedOpt === exercise.correct);
+        const feedbackDiv = document.getElementById(`fb-${qIndex}`);
+        let msg = "";
+        let type = "";
+        if (isCorrect) {
+            msg = `✅ Correct ! ${exercise.explanation || ""}`;
+            type = "correct";
+        } else {
+            const correctAnswerText = exercise.options[exercise.correct];
+            msg = `❌ Faux ! La bonne réponse était "${correctAnswerText}". ${exercise.explanation}`;
+            type = "wrong";
+        }
+        feedbacks.set(qIndex, { msg, type });
+        if (feedbackDiv) {
+            feedbackDiv.innerHTML = msg;
+            feedbackDiv.className = `feedback ${type}`;
+        }
+        userAnswers.set(qIndex, selectedOpt);
+        // masquer les stats quand nouvelle réponse après score affiché
+        if (scoreDisplayed) {
+            statsArea.classList.add("hidden");
+            scoreDisplayed = false;
+        }
+    }
+
+    function computeAndShowStats(theme) {
+        const exercises = themesData[theme];
+        if (!exercises) return;
+        let total = exercises.length;
+        let correctCount = 0;
+        for (let i = 0; i < total; i++) {
+            const selected = userAnswers.get(i);
+            if (selected !== undefined && selected === exercises[i].correct) {
+                correctCount++;
+            }
+        }
+        const percent = Math.round((correctCount / total) * 100);
+        scoreValueSpan.textContent = `${percent}% (${correctCount}/${total})`;
+        let advice = "";
+        if (percent > 80) {
+            advice = "🎉 Continue comme ça, tes points forts sont solides !";
+        } else {
+            advice = "📚 Travaille sur les questions incorrectes pour t’améliorer. Relis les explications !";
+        }
+        adviceMessageSpan.textContent = advice;
+        statsArea.classList.remove("hidden");
+        scoreDisplayed = true;
+    }
+
+    resetStatsBtn.addEventListener("click", () => {
+        statsArea.classList.add("hidden");
+        scoreDisplayed = false;
+    });
+
+    // Initialisation
+    buildMenu();
+    // premier thème actif par défaut
+    const firstTheme = Object.keys(themesData)[0];
+    if (firstTheme) {
+        document.querySelectorAll(".theme-btn")[0]?.classList.add("active");
+        loadTheme(firstTheme);
+    }
+</script>
+</body>
+</html>
