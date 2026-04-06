@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Grammar Gym – Multi‑level Training</title>
+    <!-- Liaison vers le fichier CSS externe -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon optionnel (juste pour éviter erreur 404) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- En-tête -->
+        <header class="header">
+            <h1>📘 English Grammar Gym</h1>
+            <p>Entraînez-vous niveau par niveau – QCM interactifs avec explications détaillées</p>
+        </header>
+
+        <!-- Sélecteur de niveau (Beginner, Intermediate, Advanced) -->
+        <div class="level-tabs" id="levelTabs">
+            <button data-level="beginner" class="level-btn active">🌟 Beginner</button>
+            <button data-level="intermediate" class="level-btn">⚡ Intermediate</button>
+            <button data-level="advanced" class="level-btn">🎓 Advanced</button>
+        </div>
+
+        <!-- Menu des thèmes (dynamique selon le niveau) -->
+        <div class="theme-menu" id="themeMenu">
+            <div class="loading-message">Chargement des thèmes...</div>
+        </div>
+
+        <!-- Zone principale : exercices + stats -->
+        <div class="main-panel">
+            <div class="stats-area" id="statsArea">
+                <div>
+                    <span class="score-badge" id="scoreValue">0%</span>
+                    <button class="reset-stats-btn" id="resetStatsBtn">⟳ Masquer</button>
+                </div>
+                <div class="advice-text" id="adviceMessage"></div>
+            </div>
+
+            <div id="exercisesContainer">
+                <div class="empty-message">✨ Sélectionnez un niveau puis un thème pour commencer ✨</div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>✅ Correction immédiate · Explications · Statistiques par thème</p>
+        </footer>
+    </div>
+
+    <!-- Chargement du fichier JSON (via fetch) puis du JavaScript principal -->
+    <script src="exercises.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
